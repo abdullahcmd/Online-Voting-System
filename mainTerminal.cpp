@@ -1,9 +1,8 @@
 #include <iostream>
 #include "LinkedList.h"
 #include "candidate.h"
+#include <cctype>
 using namespace std;
-
-
 
 void castVote (int voterID, userInfo *tempVoter,candidate* tempcad,userInfo* head)
 {
@@ -18,7 +17,7 @@ void castVote (int voterID, userInfo *tempVoter,candidate* tempcad,userInfo* hea
             }
             while (tempcad!=NULL&& tempVoter!=NULL)
            {
-            cout<<"--"<<tempcad->name<<endl;
+            cout<<"--"<<tempcad->name<<"---Voting Symbol: "<<tempcad->symbol<<endl;
             tempcad=tempcad->right;
             if (tempVoter->right==nullptr)
             {
@@ -26,11 +25,19 @@ void castVote (int voterID, userInfo *tempVoter,candidate* tempcad,userInfo* hea
                 break;
             }
            }
+           cout<<"Enter your choice: "<<endl;
+            string symbol;
+            cin>>symbol;
+
+            for (char& c : symbol) {
+            c = toupper(c);
+
+            }
+
+           cout << "Your choice in uppercase: " << symbol << endl;
 
 
 }
-
-
 
 int main()
 {
@@ -50,9 +57,6 @@ int main()
     int choice;
     int voterID;
 
-
-
-
     while (true)
     {
         cout << "\n=== Online Voting System ===\n";
@@ -67,7 +71,6 @@ int main()
         case 1:
             castVote(voterID,tempVoter,tempcad,head);
             break;
-
         case 3:
             cout << "Thank you for using the Online Voting System!\n";
             return 0;
