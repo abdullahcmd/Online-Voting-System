@@ -3,73 +3,56 @@
 #include "candidate.h"
 #include <cctype>
 using namespace std;
-
-<<<<<<< HEAD
-void castVote (int voterID, userInfo *tempVoter,candidate* tempcad,userInfo* head)
-{
-        cout << "Enter your Voter ID: "<<endl;
-            cin >> voterID;
-            cout<<endl;
-            tempVoter = authentication(voterID,head);
-            if (tempVoter!=NULL)
-            {
-                cout << "The candidate list is given below :"<<endl;
-                cout<<endl;
-            }
-            while (tempcad!=NULL&& tempVoter!=NULL)
-           {
-            cout<<"--"<<tempcad->name<<"---Voting Symbol: "<<tempcad->symbol<<endl;
-            tempcad=tempcad->right;
-            if (tempVoter->right==nullptr)
-            {
-                tempVoter=head;
-                break;
-            }
-           }
-           cout<<"Enter your choice: "<<endl;
-            string symbol;
-            cin>>symbol;
-
-            for (char& c : symbol) {
-            c = toupper(c);
-
-            }
-
-           cout << "Your choice in uppercase: " << symbol << endl;
-=======
-void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head)
+void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head, candidate *cad_head)
 {
     cout << "Enter your Voter ID: " << endl;
     cin >> voterID;
     cout << endl;
     tempVoter = authentication(voterID, head);
-    if (tempVoter != NULL)
+
+    if (tempVoter != nullptr)
     {
         cout << "The candidate list is given below :" << endl;
         cout << endl;
-    }
-    while (tempcad != NULL && tempVoter != NULL)
+    
+    // Displayin the candidate linked list
+    while (tempcad != NULL)
     {
-        cout << "--" << tempcad->name << endl;
+        cout << "--" << tempcad->name << "---Voting Symbol: " << tempcad->symbol << endl;
         tempcad = tempcad->right;
-        if (tempVoter->right == nullptr)
-        {
-            tempVoter = head;
-            break;
-        }
+      
     }
->>>>>>> b6441aeebac9664f65686bcb45a8597a3af7a7fd
-
-    cout << "Enter your choice: " << endl;
+    // To point the candidate linked list again towards head. 
+      if (tempcad==NULL)
+        {
+            tempcad = cad_head;
+            
+        }
+    cout << "Enter the candidate symbol: " << endl;
     string symbol;
     cin >> symbol;
-
+//uppercasing the users input symbol
     for (char &c : symbol)
     {
         c = toupper(c);
     }
+//Matching the users symbol to the candidate symbol and if matched then incrementing the vote of that candidate.
+    while (tempcad != nullptr)
+    {
+        if (symbol == tempcad->symbol)
+        {
+            cout << " The candidate has been found.";
+            tempcad->votes++;
+            cout<<tempcad->votes;
+            break;
+        }
+        else
+        {
+            tempcad = tempcad->right;
+        }
+    }
 
-    cout << "Your choice in uppercase: " << symbol << endl;
+    }
 }
 
 int main()
@@ -102,7 +85,7 @@ int main()
         switch (choice)
         {
         case 1:
-            castVote(voterID, tempVoter, tempcad, head);
+            castVote(voterID, tempVoter, tempcad, head,cad_head);
             break;
         case 3:
             cout << "Thank you for using the Online Voting System!\n";
