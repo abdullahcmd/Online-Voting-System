@@ -17,9 +17,9 @@ public:
     string symbol;
     candidate *right;
 
-    candidate(int cnic, string name, int age, string address,string symbol)
+    candidate(int cnic, string name, int age, string address,string symbol,int votee)
     {
-        votes=0;
+        votes=votee;
         this->age = age;
         this->cnic = cnic;
         this->name = name;
@@ -29,9 +29,9 @@ public:
         this->symbol=symbol;
     }
 };
-    candidate* insertNode(candidate *&head,  candidate*&tail, int cnic, string name, int age, string address,string symbol)
+    candidate* insertNode(candidate *&head,  candidate*&tail, int cnic, string name, int age, string address,string symbol,int votes)
     {
-        candidate *newNode = new candidate(cnic, name, age, address,symbol);
+        candidate *newNode = new candidate(cnic, name, age, address,symbol,votes);
         if (head == nullptr)
         {
             head = newNode;
@@ -78,14 +78,15 @@ candidate* readCadDataFromCSV(const string& filename, candidate*& head, candidat
         }
 
         stringstream ss(line);
-        string cnicStr, name, ageStr, address, symbol;
+        string cnicStr, name, ageStr, address, symbol,votesStr;
 
         
         getline(ss, cnicStr, ',');
         getline(ss, name, ',');
         getline(ss, ageStr, ',');
         getline(ss, address,',');
-        getline(ss, symbol);
+        getline(ss, symbol,',');
+        getline(ss, votesStr);
       
 
        
@@ -97,9 +98,10 @@ candidate* readCadDataFromCSV(const string& filename, candidate*& head, candidat
        
         int cnic = stoi(cnicStr);
         int age = stoi(ageStr);
+        int votes = stoi(votesStr);
 
        
-        insertNode(head, tail, cnic, name, age, address, symbol);
+        insertNode(head, tail, cnic, name, age, address, symbol,votes);
     }
 
     file.close();

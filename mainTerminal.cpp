@@ -2,9 +2,11 @@
 #include "LinkedList.h"
 #include "candidate.h"
 #include "BST.h"
+#include "priorityQueue.h"
 #include <cctype>
 using namespace std;
-void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head, candidate *cad_head, VoterNode* &root)
+
+void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head, candidate *cad_head, VoterNode *&root)
 {
     cout << "Enter your Voter ID: " << endl;
     cin >> voterID;
@@ -52,17 +54,13 @@ void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *he
             }
         }
 
-        if (!candidateFound) 
+        if (!candidateFound)
         {
             cout << "The candidate was not found.";
         }
 
-       insertIntoBST(root,tempVoter->cnic);
-       saveBSTToFile(root,"BST.txt");
-       cout<<"the saved bst is printed following"<<endl;
-       displayBSTInOrder(root);
-      
-
+        insertIntoBST(root, tempVoter->cnic);
+        saveBSTToFile(root, "BST.txt");
     }
 }
 
@@ -81,12 +79,16 @@ int main()
     readCadDataFromCSV(cadfilename, cad_head, cad_tail);
     candidate *tempcad = cad_head;
     VoterNode *root = new VoterNode(0);
-
+    // BST FILE ADDED
     string bstfilename = "BST.txt";
     VoterNode *loadedRoot = loadBSTFromFile(bstfilename);
     cout << "BST loaded from file:" << endl;
+    // PRIORITY QUEUE
+    priority_queue<CandidatePriority> pq;
+    priority_queue<CandidatePriority> loadedPQ;
 
     int choice;
+
     int voterID;
 
     while (true)
@@ -101,7 +103,16 @@ int main()
         switch (choice)
         {
         case 1:
-            castVote(voterID, tempVoter, tempcad, head, cad_head,loadedRoot);
+            castVote(voterID, tempVoter, tempcad, head, cad_head, loadedRoot);
+            break;
+        case 2:
+            pq = createPriorityQueue(cad_head);
+            displayPriorityQueue(pq);
+            savePriorityQueueToFile(pq, "votes.txt");
+
+            loadedPQ = loadPriorityQueueFromFile("votes.txt");
+
+            displayPriorityQueue(loadedPQ);
             break;
         case 3:
             cout << "Thank you for using the Online Voting System!\n";
