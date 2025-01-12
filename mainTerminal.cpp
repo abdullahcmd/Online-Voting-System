@@ -12,8 +12,9 @@ void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *he
     cin >> voterID;
     cout << endl;
     tempVoter = authentication(voterID, head);
-
-    if (tempVoter != nullptr)
+    bool doubleVotes= searchInBST(root,tempVoter->cnic);
+    
+    if (tempVoter != nullptr && doubleVotes==false)
     {
         cout << "The candidate list is given below :" << endl;
         cout << endl;
@@ -61,6 +62,18 @@ void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *he
 
         insertIntoBST(root, tempVoter->cnic);
         saveBSTToFile(root, "BST.txt");
+    }
+
+    else {
+            if(doubleVotes==true)
+    {
+        cout<<"Cnic is already present in the BST. Doublevotes cannot be casted.";
+    }
+    else if(tempVoter==nullptr)
+    {
+        cout<<"Cnic is not valid.";
+    }
+    
     }
 }
 

@@ -99,5 +99,20 @@ void displayBSTInOrder(VoterNode* root) {
     cout << "CNIC: " << root->cnic <<endl;
     displayBSTInOrder(root->right);
 }
+bool searchInBST(VoterNode* root, int cnic) {
+    if (root == nullptr) {
+        return false;  // Base case: If tree is empty or node not found
+    }
+
+    if (root->cnic == cnic) {
+        return true;  // CNIC found
+    }
+
+    if (cnic < root->cnic) {
+        return searchInBST(root->left, cnic);  // Search in the left subtree
+    }
+
+    return searchInBST(root->right, cnic);  // Search in the right subtree
+}
 
 #endif
