@@ -1,9 +1,10 @@
 #include <iostream>
 #include "LinkedList.h"
 #include "candidate.h"
+#include "BST.h"
 #include <cctype>
 using namespace std;
-void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head, candidate *cad_head)
+void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *head, candidate *cad_head, VoterNode* &root)
 {
     cout << "Enter your Voter ID: " << endl;
     cin >> voterID;
@@ -14,43 +15,53 @@ void castVote(int voterID, userInfo *tempVoter, candidate *tempcad, userInfo *he
     {
         cout << "The candidate list is given below :" << endl;
         cout << endl;
-    
-    // Displayin the candidate linked list
-    while (tempcad != NULL)
-    {
-        cout << "--" << tempcad->name << "---Voting Symbol: " << tempcad->symbol << endl;
-        tempcad = tempcad->right;
-      
-    }
-    // To point the candidate linked list again towards head. 
-      if (tempcad==NULL)
+
+        // Displayin the candidate linked list
+        while (tempcad != NULL)
         {
-            tempcad = cad_head;
-            
-        }
-    cout << "Enter the candidate symbol: " << endl;
-    string symbol;
-    cin >> symbol;
-//uppercasing the users input symbol
-    for (char &c : symbol)
-    {
-        c = toupper(c);
-    }
-//Matching the users symbol to the candidate symbol and if matched then incrementing the vote of that candidate.
-    while (tempcad != nullptr)
-    {
-        if (symbol == tempcad->symbol)
-        {
-            cout << " The candidate has been found.";
-            tempcad->votes++;
-            cout<<tempcad->votes;
-            break;
-        }
-        else
-        {
+            cout << "--" << tempcad->name << "---Voting Symbol: " << tempcad->symbol << endl;
             tempcad = tempcad->right;
         }
-    }
+        // To point the candidate linked list again towards head.
+        if (tempcad == NULL)
+        {
+            tempcad = cad_head;
+        }
+        cout << "Enter the candidate symbol: " << endl;
+        string symbol;
+        cin >> symbol;
+        // uppercasing the users input symbol
+        for (char &c : symbol)
+        {
+            c = toupper(c);
+        }
+        bool candidateFound = false;
+        while (tempcad != nullptr)
+        {
+            if (symbol == tempcad->symbol)
+            {
+                cout << " The candidate has been found.";
+                tempcad->votes++;
+                cout << tempcad->votes;
+                candidateFound = true;
+                break;
+            }
+            else
+            {
+                tempcad = tempcad->right;
+            }
+        }
+
+        if (!candidateFound) 
+        {
+            cout << "The candidate was not found.";
+        }
+
+       insertIntoBST(root,tempVoter->cnic);
+       saveBSTToFile(root,"BST.txt");
+       cout<<"the saved bst is printed following"<<endl;
+       displayBSTInOrder(root);
+      
 
     }
 }
@@ -69,6 +80,11 @@ int main()
     string cadfilename = "cad_data.csv";
     readCadDataFromCSV(cadfilename, cad_head, cad_tail);
     candidate *tempcad = cad_head;
+    VoterNode *root = new VoterNode(0);
+
+    string bstfilename = "BST.txt";
+    VoterNode *loadedRoot = loadBSTFromFile(bstfilename);
+    cout << "BST loaded from file:" << endl;
 
     int choice;
     int voterID;
@@ -85,7 +101,7 @@ int main()
         switch (choice)
         {
         case 1:
-            castVote(voterID, tempVoter, tempcad, head,cad_head);
+            castVote(voterID, tempVoter, tempcad, head, cad_head,loadedRoot);
             break;
         case 3:
             cout << "Thank you for using the Online Voting System!\n";
